@@ -1,0 +1,252 @@
+
+WindowManager:
+    LoginPage:
+    MainWindow:
+        id: main_w
+    SecondWindow:
+    
+    
+
+<LoginPage>
+
+    name: 'login'
+    Widget:
+    
+        canvas:
+            Rectangle:
+                source: '1.jpg'
+                pos: self.pos
+                size: self.size
+        Label:
+            center_x: (root.width/2)
+            top: (root.top/2) + 230
+            text: "LOGIN"
+            color: [1,1,1,0.8]
+            font_size: 37 
+        
+                    
+        TextInput:
+            id : login_id
+            multiline : False
+            center_x: (root.width/2) 
+            top: (root.top/2)+ 100
+            size_hint: None,None
+            hint_text: "username"
+            foreground_color : [1,1,1,1]
+            background_color: [0.0,0.0,0.0,0.4]
+            size: 250, 35
+            max_lines: 1
+            valign: 'middle'
+            halign: 'center'
+            font_size: 15
+            multiline: False
+                   
+                    
+
+        TextInput :
+            id : pass_id
+            multiline : False
+            center_x: (root.width/2)
+            top: (root.top/2) + 50
+            foreground_color : [1,1,1,1]
+            size_hint: None, None
+            hint_text: "password"
+            background_color: [0.0,0.0,0.0,0.4]
+            size: 250, 35
+            max_lines: 1
+            valign: 'middle'
+            halign: 'center'
+            font_size: 15
+            multiline: False
+            password: True
+            
+
+        Button:
+                
+            text : "Submit"
+            size: 90,35
+            center_x: (root.width/2)
+            top: (root.top/2)
+            font_size: 18
+            background_color: (1,1,1,0.1)
+            on_press: 
+                root.verify_credentials()
+                login_id.text = ""
+                pass_id.text = ""
+                
+                    
+                    
+
+<MainWindow>
+ 
+    press_read : 'press_read'
+    name : 'main'
+    
+    Widget:
+    
+        canvas:
+            Rectangle:
+                source: '1.jpg'
+                pos: self.pos
+                size: self.size
+        Label:
+            center_x: (root.width/2)
+            top: (root.top/2) + 250
+            text: "INTRADAY"
+            color: [1,1,1,0.8]
+            font_size: 37 
+
+        TextInput:
+            id : balance_user
+            multiline : False
+            center_x: (root.width/2) 
+            top: (root.top/2)+ 150
+            foreground_color : [1,1,1,1]
+            size_hint: None,None
+            hint_text: "Enter Balance"
+            background_color: [0.0,0.0,0.0,0.4]
+            size: 250, 35
+            max_lines: 1
+            valign: 'middle'
+            halign: 'center'
+            font_size: 15
+            multiline: False
+        
+                    
+        TextInput:
+            id : high_id
+            multiline : False
+            center_x: (root.width/2) 
+            top: (root.top/2)+ 100
+            size_hint: None,None
+            foreground_color : [1,1,1,1]
+            hint_text: "Enter High"
+            background_color: [0.0,0.0,0.0,0.4]
+            size: 250, 35
+            max_lines: 1
+            valign: 'middle'
+            halign: 'center'
+            font_size: 15
+            multiline: False
+                    
+                    
+
+        TextInput :
+            id : low_id
+            multiline : False
+            center_x: (root.width/2)
+            top: (root.top/2) + 50
+            size_hint: None, None
+            hint_text: "Enter Low"
+            foreground_color : [1,1,1,1]
+            background_color: [0.0,0.0,0.0,0.4]
+            size: 250, 35
+            max_lines: 1
+            valign: 'middle'
+            halign: 'center'
+            font_size: 15
+            multiline: False
+        
+        TextInput :
+            id : script_id
+            multiline : False
+            center_x: (root.width/2)
+            top: (root.top/2) + 0
+            size_hint: None, None
+            hint_text: "Enter Script Ticker"
+            background_color: [0.0,0.0,0.0,0.4]
+            size: 250, 35
+            foreground_color : [1,1,1,1]
+            max_lines: 1
+            valign: 'middle'
+            halign: 'center'
+            font_size: 15
+            multiline: False
+
+        Button:
+            size: 90,35
+            center_x: (root.width/2)
+            top: (root.top/2) - 50
+            font_size: 18
+            background_color: (1,1,1,0.1)   
+            text : "Submit"
+            
+            on_press :
+                
+                balance =  float(balance_user.text)
+                high = float(high_id.text)
+                script = str(script_id.text)
+                buy_price = float(high + 0.05)
+                low = float(low_id.text)
+                sell_price = float(low - 0.05)
+                low_s = str(int(low))
+                target = balance * 0.05
+                if len(low_s) == 2 : target_points = '0.' + low_s[0]
+                elif len(low_s) == 3: target_points = low_s[0]
+                elif len(low_s) == 4: target_points = low_s[0] + '0'
+                elif len(low_s) == 5: target_points = low_s[0] + low_s[1] + '0'
+                quantity = int(target / float(target_points))
+                
+                root.manager.get_screen('result').final_label.text ='\nQuantity : ' + str(quantity) +  '\nBuy Trigger : ' + str(high) + '\nBuy Price : ' + str(buy_price) + '\nSell Trigger : ' + str(low) + '\nSell Price : ' + str(sell_price)
+                app.root.transition.direction = "left"
+                app.root.current = "result"
+                
+                
+                
+        Button :
+            size: 90,35
+            center_x: (root.width/2)
+            top: (root.top/2) - 100
+            font_size: 18
+            background_color: (1,1,1,0.1)  
+            text : "Back"
+            
+            on_press : 
+                app.root.transition.direction = "right"
+                app.root.current = "login"                
+            
+<SecondWindow>:
+    name : "result"
+    final_label : final_label
+    
+
+    
+    Widget:
+    
+        canvas:
+            Rectangle:
+                source: '1.jpg'
+                pos: self.pos
+                size: self.size
+        Label:
+            id : final_label
+            center_x: (root.width/2)
+            top: (root.top/2) + 200
+            text: "INTRADAY RESULTS"
+            color: [1,1,1,0.8]
+            font_size: 25
+
+                
+        Button :
+            size: 90,35
+            center_x: (root.width/2)
+            top: (root.top/2)
+            font_size: 18
+            background_color: (1,1,1,0.1)  
+            text : "Notify my order"
+            
+            on_press : 
+                root.run()
+                
+
+        Button :
+            size: 90,35
+            center_x: (root.width/2)
+            top: (root.top/2) - 50
+            font_size: 18
+            background_color: (1,1,1,0.1)  
+            text : "Back"
+            on_press :  
+                app.root.current = "main"
+                app.root.transition.direction = "right"
+       
